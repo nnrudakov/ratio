@@ -19,11 +19,11 @@ use app\models\Plp\Task\FatalException;
 class ClassMethodTest extends DbTestCase
 {
     /**
-     * Test class exception.
+     * Проверка выброса исключения.
      *
      * @expectedException \app\models\Plp\Task\FatalException
      *
-     * @throws FatalException       
+     * @throws FatalException
      * @throws \PHPUnit_Framework_Exception
      */
     public function testClassException()
@@ -33,7 +33,17 @@ class ClassMethodTest extends DbTestCase
     }
 
     /**
-     * Test method exception.
+     * Проверка инициализации класса.
+     *
+     * @throws FatalException
+     */
+    public function testClassExists()
+    {
+        TaskFactory::build('integration', 'testmethod');
+    }
+
+    /**
+     * Проверка существования метода.
      */
     public function testMethodException()
     {

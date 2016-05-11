@@ -20,7 +20,7 @@ class TaskFactory
      */
     public static function build($className, $methodName)
     {
-        $class = ucfirst($className);
+        $class = __NAMESPACE__ . '\\' . ucfirst($className);
 
         if (class_exists($class)) {
             $class = new $class();
