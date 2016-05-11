@@ -31,7 +31,7 @@ class TaskExecutionTest extends DbTestCase
     /**
      * Проверка записи успешного выполнения задачи.
      *
-     * @throws FatalException 
+     * @throws FatalException
      * @throws yii\base\InvalidConfigException
      * @throws yii\base\InvalidParamException
      */
@@ -45,16 +45,29 @@ class TaskExecutionTest extends DbTestCase
         $result = json_decode($task->result, true);
         self::assertArrayHasKey('type', $result);
         self::assertSame($result['type'], 'success');
+        self::assertEquals($task->status, Task::STATUS_DONE);
+        self::assertNotEmpty($task->finished);
     }
 
     /**
      * Проверка записи неуспешного выполнения задачи.
      *
      * @throws FatalException
+     * @throws yii\base\InvalidConfigException
+     * @throws yii\base\InvalidParamException
      */
     public function testFail()
     {
-        self::assertTrue(false);
+        $data = $this->tasks[3];
+        $task = Task::findOne(['id' => $data['id']]);
+        $executor = TaskFactory::build($task->task, $task->action);
+        self::assertTrue($executor->run($task));
+        $task = Task::findOne(['id' => $data['id']]);
+        $result = json_decode($task->result, true);
+        self::assertArrayHasKey('type', $result);
+        self::assertSame($result['type'], 'fail');
+        self::assertEquals($task->status, Task::STATUS_UNDONE);
+        self::assertEmpty($task->finished);
     }
 
     /**
