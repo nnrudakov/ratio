@@ -15,6 +15,8 @@ class TaskFactory
     /**
      * @param string $className  Имя класса.
      * @param string $methodName Имя метода.
+     *                           
+     * @return BaseTask
      *
      * @throws FatalException
      */
@@ -23,7 +25,7 @@ class TaskFactory
         $class = __NAMESPACE__ . '\\' . ucfirst($className);
 
         if (class_exists($class)) {
-            $class = new $class();
+            $class = new $class(['method' => $methodName]);
         } else {
             throw new FatalException('Класс для задачи "' . $className . '" не существует.');
         }
@@ -31,5 +33,7 @@ class TaskFactory
         if (!method_exists($class, $methodName)) {
             throw new FatalException('Метод "' . $methodName . '" для задачи "' . $className . '" не существует.');
         }
+        
+        return $class;
     }
 }
