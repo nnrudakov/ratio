@@ -6,6 +6,8 @@ use yii;
 use Codeception\Specify;
 use tests\codeception\unit\DbTestCase;
 use tests\codeception\fixtures\TaskFixture;
+use app\models\Plp\Task\TaskFactory;
+use app\models\Plp\Task\FatalException;
 
 /**
  * Class ClassMethodTest
@@ -18,10 +20,16 @@ class ClassMethodTest extends DbTestCase
 {
     /**
      * Test class exception.
+     *
+     * @expectedException \app\models\Plp\Task\FatalException
+     *
+     * @throws FatalException       
+     * @throws \PHPUnit_Framework_Exception
      */
     public function testClassException()
     {
-        $this->assertTrue(false);
+        TaskFactory::build('testclass', 'testmethod');
+        $this->expectExceptionMessage('Класс для задачи "testclass" не существует.');
     }
 
     /**
