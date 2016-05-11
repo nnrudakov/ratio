@@ -23,6 +23,14 @@ return [
                     'class' => 'yii\log\FileTarget',
                     'levels' => ['error', 'warning'],
                 ],
+                [
+                    'class' => 'yii\log\FileTarget',
+                    'levels' => ['error'],
+                    'categories' => [
+                        'app\models\Plp\Task\FatalException',
+                    ],
+                    'logFile' => '@runtime/logs/error_log'
+                ]
             ],
         ],
         'db' => $db,
