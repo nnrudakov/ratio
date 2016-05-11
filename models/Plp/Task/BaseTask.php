@@ -30,7 +30,7 @@ class BaseTask extends Object
      *
      * @var string
      */
-    protected $messageSuccess = 'Задача выполнена.';
+    protected static $messageSuccess = 'Задача выполнена.';
 
     /**
      * Сообщение о неуспешном выполнении задачи.
@@ -71,11 +71,10 @@ class BaseTask extends Object
         }
 
         try {
-            $this->{$this->method}(json_decode($task->data, true));
-            $result = ['type' => 'success', 'message' => $this->messageSuccess];
+            $result = $this->{$this->method}(json_decode($task->data, true));
             $task->setDone();
         } catch (UserException $e) {
-            $result = ['type' => 'fail', 'message' => $this->messageFail];
+            $result = ['type' => 'fail', 'message' => $e->getMessage()];
             $task->setUnDone();
         }
 

@@ -16,12 +16,12 @@ class Message extends BaseTask
      *
      * @param array $data Данные.
      *
-     * @return bool
+     * @return array
      *
      * @throws UserException
      */
     public static function sms(array $data = [])
     {
-        return true;
+        return ['type' => 'success', 'message' => 'Сообщение отправлено.'];
     }
 }

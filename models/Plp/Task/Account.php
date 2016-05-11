@@ -16,12 +16,12 @@ class Account extends BaseTask
      *
      * @param array $data Данные.
      *
-     * @return bool
+     * @return array
      *
      * @throws UserException
      */
     public static function bill(array $data = [])
     {
-        return true;
+        return ['type' => 'success', 'message' => self::$messageSuccess];
     }
 }

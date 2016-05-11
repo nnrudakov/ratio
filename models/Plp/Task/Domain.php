@@ -22,6 +22,6 @@ class Domain extends BaseTask
      */
     public static function addzone(array $data = [])
     {
-        return true;
+        return ['type' => 'success', 'message' => 'Домен добавлен.'];
     }
 }

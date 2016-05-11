@@ -16,7 +16,7 @@ class Integration extends BaseTask
      *
      * @param array $data Данные.
      *
-     * @return bool
+     * @return array
      *
      * @throws UserException
      */
@@ -26,6 +26,6 @@ class Integration extends BaseTask
             throw new UserException('Недостаточно передано параметов.');
         }
 
-        return true;
+        return ['type' => 'success', 'message' => self::$messageSuccess];
     }
 }
