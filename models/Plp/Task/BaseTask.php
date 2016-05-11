@@ -2,7 +2,7 @@
 
 namespace app\models\Plp\Task;
 
-use yii\base\InvalidParamException;
+use yii;
 use yii\base\Object;
 use yii\helpers\Json;
 use app\models\Plp\Task;
@@ -42,6 +42,14 @@ class BaseTask extends Object
     protected $messageFail = 'Задача невыполнена.';
 
     /**
+     * Сообщение о невозможности выполнения задачи.
+     * Может быть переопределено в конкретном исполнителей задачи.
+     *
+     * @var string
+     */
+    protected $messageFatal = 'Задача не может быть выполнена.';
+
+    /**
      * Запуск метода.
      *
      * Запускается метод, выполняющий задачу. В случае успешного выполнения записывает результат в БД через
@@ -51,11 +59,20 @@ class BaseTask extends Object
      *
      * @return bool
      *
+     * @throws FatalException
      * @throws \yii\base\InvalidConfigException
      * @throws \yii\base\InvalidParamException
      */
     public function run(Task $task)
     {
+        if ($task->retries >= Yii::$app->params['retries']) {
+            $this->messageFatal = 'Превышено количество попыток.';
+            $task->setCantDone();
+            $task->result = Json::encode(['type' => 'fail', 'message' => $this->messageFatal]);
+            $task->save();
+            throw new FatalException($this->messageFatal);
+        }
+
         try {
             $this->{$this->method}(json_decode($task->data, true));
             $result = ['type' => 'success', 'message' => $this->messageSuccess];

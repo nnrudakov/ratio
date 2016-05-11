@@ -83,6 +83,7 @@ class TaskExecutionTest extends DbTestCase
      * @throws FatalException
      * @throws yii\base\InvalidConfigException
      * @throws yii\base\InvalidParamException
+     * @throws \PHPUnit_Framework_Exception
      */
     public function testCount()
     {
@@ -92,6 +93,15 @@ class TaskExecutionTest extends DbTestCase
         $task->retries = 3;
         $executor = TaskFactory::build($task->task, $task->action);
         $executor->run($task);
+        $this->expectExceptionMessage('Превышено количество попыток.');
+        $task = Task::findOne(['id' => $task->id]);
+        $result = json_decode($task->result, true);
+        self::assertArrayHasKey('type', $result);
+        self::assertSame($result['type'], 'fail');
+        self::assertEquals($task->status, Task::STATUS_CANTDONE);
+        self::assertEmpty($task->finished);
+        self::assertNotEmpty($task->deffer);
+        self::assertGreaterThan(0, $task->retries);
     }
 
     /**

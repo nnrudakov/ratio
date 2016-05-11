@@ -24,6 +24,13 @@ use yii\db\ActiveRecord;
 class Task extends ActiveRecord
 {
     /**
+     * Статус задачи "невозможно выполнить".
+     *
+     * @var integer
+     */
+    const STATUS_CANTDONE = -1;
+
+    /**
      * Статус задачи "невыполнена".
      *
      * @var integer
@@ -103,5 +110,18 @@ class Task extends ActiveRecord
         $this->finished = null;
         $this->status = self::STATUS_UNDONE;
         $this->retries++;
+    }
+
+    /**
+     * Установка задачи как невозможной к выполнению.
+     *
+     * @throws yii\base\InvalidConfigException
+     * @throws yii\base\InvalidParamException
+     */
+    public function setCantDone()
+    {
+        $this->deffer = Yii::$app->formatter->asDatetime('now', 'yyyy-MM-dd HH:mm:ss');
+        $this->finished = null;
+        $this->status = self::STATUS_CANTDONE;
     }
 }
