@@ -60,14 +60,19 @@ class TaskExecutionTest extends DbTestCase
     {
         $data = $this->tasks[3];
         $task = Task::findOne(['id' => $data['id']]);
+        $data = json_decode($task->data, true);
+        unset($data['integration_id']);
+        $task->data = json_encode($data);
         $executor = TaskFactory::build($task->task, $task->action);
         self::assertTrue($executor->run($task));
-        $task = Task::findOne(['id' => $data['id']]);
+        $task = Task::findOne(['id' => $task->id]);
         $result = json_decode($task->result, true);
         self::assertArrayHasKey('type', $result);
         self::assertSame($result['type'], 'fail');
         self::assertEquals($task->status, Task::STATUS_UNDONE);
         self::assertEmpty($task->finished);
+        self::assertNotEmpty($task->deffer);
+        self::assertGreaterThan(0, $task->retries);
     }
 
     /**

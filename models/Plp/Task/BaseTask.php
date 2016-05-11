@@ -26,6 +26,22 @@ class BaseTask extends Object
     public $method;
 
     /**
+     * Сообщение об успешном выполнении задачи.
+     * Может быть переопределено в конкретном исполнителей задачи.
+     *
+     * @var string
+     */
+    protected $messageSuccess = 'Задача выполнена.';
+
+    /**
+     * Сообщение о неуспешном выполнении задачи.
+     * Может быть переопределено в конкретном исполнителей задачи.
+     *
+     * @var string
+     */
+    protected $messageFail = 'Задача невыполнена.';
+
+    /**
      * Запуск метода.
      *
      * Запускается метод, выполняющий задачу. В случае успешного выполнения записывает результат в БД через
@@ -40,10 +56,16 @@ class BaseTask extends Object
      */
     public function run(Task $task)
     {
-        $result = $this->{$this->method}(json_decode($task->data, true));
+        try {
+            $this->{$this->method}(json_decode($task->data, true));
+            $result = ['type' => 'success', 'message' => $this->messageSuccess];
+            $task->setDone();
+        } catch (UserException $e) {
+            $result = ['type' => 'fail', 'message' => $this->messageFail];
+            $task->setUnDone();
+        }
 
         $task->result = Json::encode($result);
-        $task->setDone();
         $task->save();
 
         return true;

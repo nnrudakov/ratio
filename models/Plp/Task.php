@@ -90,4 +90,18 @@ class Task extends ActiveRecord
         $this->finished = Yii::$app->formatter->asDatetime('now', 'yyyy-MM-dd HH:mm:ss');
         $this->status = self::STATUS_DONE;
     }
+
+    /**
+     * Установка задачи как невыполненной.
+     *
+     * @throws yii\base\InvalidConfigException
+     * @throws yii\base\InvalidParamException
+     */
+    public function setUnDone()
+    {
+        $this->deffer = Yii::$app->formatter->asDatetime('now', 'yyyy-MM-dd HH:mm:ss');
+        $this->finished = null;
+        $this->status = self::STATUS_UNDONE;
+        $this->retries++;
+    }
 }

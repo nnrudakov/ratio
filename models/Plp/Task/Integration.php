@@ -16,12 +16,16 @@ class Integration extends BaseTask
      *
      * @param array $data Данные.
      *
-     * @return array Реультат.
+     * @return bool
+     *
+     * @throws UserException
      */
     public static function process(array $data = [])
     {
-        $result = ['type' => 'success', 'message' => 'Задача выполнена.'];
+        if (!array_key_exists('integration_id', $data)) {
+            throw new UserException('Недостаточно передано параметов.');
+        }
 
-        return $result;
+        return true;
     }
 }
