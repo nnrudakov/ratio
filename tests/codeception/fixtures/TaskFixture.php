@@ -9,5 +9,5 @@ use yii\test\ActiveFixture;
  */
 class TaskFixture extends ActiveFixture
 {
-    public $modelClass = 'models\Plp\Task';
+    public $modelClass = 'app\models\Plp\Task';
 }
