@@ -29,9 +29,9 @@ class RatioController extends Controller
      */
     public function actionIndex()
     {
-        //while (true) {
+        while (true) {
             $this->doTasks();
-        //}
+        }
 
         return Controller::EXIT_CODE_NORMAL;
     }
