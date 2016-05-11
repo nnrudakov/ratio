@@ -127,11 +127,29 @@ class Task extends ActiveRecord
 
     /**
      * Получение списка не выполненных задач.
-     * 
+     *
      * @return Task[]
      */
     public function getNewTasks()
     {
         return static::find()->where(['status' => static::STATUS_UNDONE])->orderBy('created')->all();
+    }
+
+    /**
+     * Получение результата в тексовом виде.
+     *
+     * @return string
+     *
+     * @throws yii\base\InvalidParamException
+     */
+    public function getResultText()
+    {
+        if (!$this->result) {
+            return '';
+        }
+
+        $result = yii\helpers\Json::decode($this->result);
+
+        return $result['message'];
     }
 }

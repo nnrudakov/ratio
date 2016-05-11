@@ -38,4 +38,5 @@ return [
         'db' => $db,
     ],
     'params' => $params,
+    'timeZone' => 'Europe/Moscow',
 ];

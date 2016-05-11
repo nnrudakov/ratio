@@ -19,6 +19,13 @@ use app\models\Plp\Task;
 class RatioController extends Controller
 {
     /**
+     * Строка для прогресс-бара.
+     *
+     * @var string
+     */
+    private $progressFormat = "Дата: %s. ID: %d. Задача: %s. Действие: %s. Результат: %s\n";
+
+    /**
      * Запуск обработчика фонового выполнения задач.
      *
      * @return integer
@@ -55,8 +62,30 @@ class RatioController extends Controller
             } catch (Task\FatalException $e) {
                 Yii::error($e->getMessage(), 'app\models\Plp\Task\FatalException');
             }
+
+            $this->progress($task);
         }
 
         return true;
+    }
+
+    /**
+     * Вывод информации о выполнении.
+     *
+     * @param Task $task Задача.
+     *
+     * @throws yii\base\InvalidConfigException
+     * @throws yii\base\InvalidParamException
+     */
+    private function progress(Task $task)
+    {
+        printf(
+            $this->progressFormat,
+            Yii::$app->formatter->asDatetime('now', 'dd.MM.yyyy HH:mm:ss'),
+            $task->id,
+            $task->task,
+            $task->action,
+            $task->getResultText()
+        );
     }
 }
