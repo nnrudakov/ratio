@@ -81,10 +81,17 @@ class TaskExecutionTest extends DbTestCase
      * @expectedException \app\models\Plp\Task\FatalException
      *
      * @throws FatalException
+     * @throws yii\base\InvalidConfigException
+     * @throws yii\base\InvalidParamException
      */
     public function testCount()
     {
-        self::assertTrue(false);
+        $data = $this->tasks[4];
+        $task = Task::findOne(['id' => $data['id']]);
+        $task->setUnDone();
+        $task->retries = 3;
+        $executor = TaskFactory::build($task->task, $task->action);
+        $executor->run($task);
     }
 
     /**
