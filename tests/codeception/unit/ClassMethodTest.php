@@ -1,11 +1,9 @@
 <?php
 
-namespace tests\codeception\backend\unit\models;
+namespace tests\codeception\unit;
 
 use yii;
 use Codeception\Specify;
-use tests\codeception\unit\DbTestCase;
-use tests\codeception\fixtures\TaskFixture;
 use app\models\Plp\Task\TaskFactory;
 use app\models\Plp\Task\FatalException;
 
@@ -54,18 +52,5 @@ class ClassMethodTest extends DbTestCase
     {
         TaskFactory::build('integration', 'testmethod');
         $this->expectExceptionMessage('Метод "testmethod" для задачи "testclass" не существует.');
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function fixtures()
-    {
-        return [
-            'task' => [
-                'class' => TaskFixture::className(),
-                'dataFile' => '@tests/codeception/fixtures/data/task.php'
-            ]
-        ];
     }
 }
