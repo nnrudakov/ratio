@@ -35,7 +35,12 @@ class TaskExecutionTest extends DbTestCase
      */
     public function testSuccess()
     {
-        self::assertTrue(false);
+        $data = $this->tasks[0];
+        $task = Task::findOne(['id' => $data['id']]);
+        $executor = TaskFactory::build($task->task, $task->action);
+        $result = $executor->run(json_decode($task->data, true));
+        self::assertArrayHasKey('type', $result);
+        self::assertSame($result['type'], 'success');
     }
 
     /**
