@@ -71,7 +71,7 @@ class BaseTask extends Object
         }
 
         try {
-            $result = $this->{$this->method}(json_decode($task->data, true));
+            $result = $this->{$this->method}(Json::decode($task->data));
             $task->setDone();
         } catch (UserException $e) {
             $result = ['type' => 'fail', 'message' => $e->getMessage()];

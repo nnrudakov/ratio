@@ -4,7 +4,6 @@ namespace app\models\Plp\Task;
 
 /**
  * Фабрика выбора классов задач.
- * Если класс или его метод не существует выбрасывается исключение.
  *
  * @package    ratio
  * @author     Nikolaj Rudakov <nnrudakov@gmail.com>
@@ -12,7 +11,10 @@ namespace app\models\Plp\Task;
  */
 class TaskFactory
 {
-    /**
+    /**    
+     * Возвращает экземпляр класса, который будет выполнять задачу.
+     * Если класса или запрошенного метода не существует, то вызывается исключение.
+     * 
      * @param string $className  Имя класса.
      * @param string $methodName Имя метода.
      *                           

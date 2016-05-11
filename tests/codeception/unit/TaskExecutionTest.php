@@ -20,6 +20,7 @@ class TaskExecutionTest extends DbTestCase
 {
     /**
      * Проверка записи результата задачи в БД.
+     * проверяем корректность работы модели таблицы.
      */
     public function testTaskSave()
     {
@@ -30,6 +31,8 @@ class TaskExecutionTest extends DbTestCase
 
     /**
      * Проверка записи успешного выполнения задачи.
+     * После успешного выполнения задачи должен быть выставлен соотвествующий статус, дата выполнения и записан
+     * успешный результат.
      *
      * @throws FatalException
      * @throws yii\base\InvalidConfigException
@@ -51,6 +54,8 @@ class TaskExecutionTest extends DbTestCase
 
     /**
      * Проверка записи неуспешного выполнения задачи.
+     * В случае неуспешного выполнения должен быть выставлен соотвествующий статус, записан результат,
+     * увеличено число попыток, отсутсвовать дата завершения и установлена дата, когда задача была отложена.
      *
      * @throws FatalException
      * @throws yii\base\InvalidConfigException
@@ -77,6 +82,8 @@ class TaskExecutionTest extends DbTestCase
 
     /**
      * Проверка количества повторного запуска задачи.
+     * При превышении количества попыток выполнения задачи, должен быть установлен соотвествующий статус, результат,
+     * дата получения ошибки, отсуствовать дата завершения и вызвано исключение.
      *
      * @expectedException \app\models\Plp\Task\FatalException
      *
