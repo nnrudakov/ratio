@@ -23,7 +23,9 @@ class TaskExecutionTest extends DbTestCase
      */
     public function testTaskSave()
     {
-        $this->assertTrue(false);
+        $data = $this->tasks[0];
+        $task = Task::findOne(['id' => $data['id']]);
+        self::assertTrue($task->save());
     }
 
     /**
@@ -33,7 +35,7 @@ class TaskExecutionTest extends DbTestCase
      */
     public function testSuccess()
     {
-        $this->assertTrue(false);
+        self::assertTrue(false);
     }
 
     /**
@@ -43,7 +45,7 @@ class TaskExecutionTest extends DbTestCase
      */
     public function testFail()
     {
-        $this->assertTrue(false);
+        self::assertTrue(false);
     }
 
     /**
@@ -55,7 +57,7 @@ class TaskExecutionTest extends DbTestCase
      */
     public function testCount()
     {
-        $this->assertTrue(false);
+        self::assertTrue(false);
     }
 
     /**
