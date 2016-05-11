@@ -13,5 +13,11 @@ use yii\base\Object;
  */
 class Integration extends Object
 {
-
+    /**
+     * @param array $data Данные.
+     */
+    public static function process(array $data = [])
+    {
+        
+    }
 }

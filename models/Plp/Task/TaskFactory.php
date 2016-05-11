@@ -27,5 +27,9 @@ class TaskFactory
         } else {
             throw new FatalException('Класс для задачи "' . $className . '" не существует.');
         }
+        
+        if (!method_exists($class, $methodName)) {
+            throw new FatalException('Метод "' . $methodName . '" для задачи "' . $className . '" не существует.');
+        }
     }
 }

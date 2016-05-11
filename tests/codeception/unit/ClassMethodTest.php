@@ -39,15 +39,21 @@ class ClassMethodTest extends DbTestCase
      */
     public function testClassExists()
     {
-        TaskFactory::build('integration', 'testmethod');
+        TaskFactory::build('integration', 'process');
     }
 
     /**
      * Проверка существования метода.
+     *
+     * @expectedException \app\models\Plp\Task\FatalException
+     *
+     * @throws FatalException
+     * @throws \PHPUnit_Framework_Exception
      */
     public function testMethodException()
     {
-        $this->assertTrue(false);
+        TaskFactory::build('integration', 'testmethod');
+        $this->expectExceptionMessage('Метод "testmethod" для задачи "testclass" не существует.');
     }
 
     /**
