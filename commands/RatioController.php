@@ -2,7 +2,9 @@
 
 namespace app\commands;
 
+use yii;
 use yii\console\Controller;
+use app\models\Plp\Task;
 
 /**
  * Обработчик задач.
@@ -17,11 +19,44 @@ use yii\console\Controller;
 class RatioController extends Controller
 {
     /**
-     * This command echoes what you have entered as the message.
-     * @param string $message the message to be echoed.
+     * Запуск обработчика фонового выполнения задач.
+     *
+     * @return integer
+     *
+     * @throws Task\FatalException
+     * @throws \yii\base\InvalidConfigException
+     * @throws \yii\base\InvalidParamException
      */
-    public function actionIndex($message = 'hello world')
+    public function actionIndex()
     {
-        echo $message . "\n";
+        //while (true) {
+            $this->doTasks();
+        //}
+
+        return Controller::EXIT_CODE_NORMAL;
+    }
+
+    /**
+     * Выполнение запроса задач и их выполнение.
+     *
+     * @throws Task\FatalException
+     * @throws \yii\base\InvalidConfigException
+     * @throws \yii\base\InvalidParamException
+     */
+    private function doTasks()
+    {
+        $tasks = (new Task())->getNewTasks();
+        /** @var Task $task */
+        foreach ($tasks as $task) {
+            /** @var Task\BaseTask $executor */
+            try {
+                $executor = Task\TaskFactory::build($task->task, $task->action);
+                $executor->run($task);
+            } catch (Task\FatalException $e) {
+                Yii::error($e->getMessage(), 'app\models\Plp\Task\FatalException');
+            }
+        }
+
+        return true;
     }
 }

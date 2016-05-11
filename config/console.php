@@ -18,6 +18,7 @@ return [
             'class' => 'yii\caching\FileCache',
         ],
         'log' => [
+            'traceLevel' => YII_DEBUG ? 3 : 0,
             'targets' => [
                 [
                     'class' => 'yii\log\FileTarget',
@@ -29,7 +30,8 @@ return [
                     'categories' => [
                         'app\models\Plp\Task\FatalException',
                     ],
-                    'logFile' => '@runtime/logs/error_log'
+                    'logFile' => '@runtime/logs/error_log',
+                    'logVars' => [],
                 ]
             ],
         ],

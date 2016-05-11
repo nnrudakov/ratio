@@ -95,7 +95,7 @@ class Task extends ActiveRecord
     public function setDone()
     {
         $this->finished = Yii::$app->formatter->asDatetime('now', 'yyyy-MM-dd HH:mm:ss');
-        $this->status = self::STATUS_DONE;
+        $this->status = static::STATUS_DONE;
     }
 
     /**
@@ -108,7 +108,7 @@ class Task extends ActiveRecord
     {
         $this->deffer = Yii::$app->formatter->asDatetime('now', 'yyyy-MM-dd HH:mm:ss');
         $this->finished = null;
-        $this->status = self::STATUS_UNDONE;
+        $this->status = static::STATUS_UNDONE;
         $this->retries++;
     }
 
@@ -122,6 +122,16 @@ class Task extends ActiveRecord
     {
         $this->deffer = Yii::$app->formatter->asDatetime('now', 'yyyy-MM-dd HH:mm:ss');
         $this->finished = null;
-        $this->status = self::STATUS_CANTDONE;
+        $this->status = static::STATUS_CANTDONE;
+    }
+
+    /**
+     * Получение списка не выполненных задач.
+     * 
+     * @return Task[]
+     */
+    public function getNewTasks()
+    {
+        return static::find()->where(['status' => static::STATUS_UNDONE])->orderBy('created')->all();
     }
 }
