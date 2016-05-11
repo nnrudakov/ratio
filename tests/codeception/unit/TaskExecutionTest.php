@@ -2,10 +2,10 @@
 
 namespace tests\codeception\unit;
 
-use app\models\Plp\Task;
 use yii;
 use Codeception\Specify;
 use tests\codeception\fixtures\TaskFixture;
+use app\models\Plp\Task;
 use app\models\Plp\Task\TaskFactory;
 use app\models\Plp\Task\FatalException;
 
@@ -31,14 +31,18 @@ class TaskExecutionTest extends DbTestCase
     /**
      * Проверка записи успешного выполнения задачи.
      *
-     * @throws FatalException
+     * @throws FatalException 
+     * @throws yii\base\InvalidConfigException
+     * @throws yii\base\InvalidParamException
      */
     public function testSuccess()
     {
         $data = $this->tasks[0];
         $task = Task::findOne(['id' => $data['id']]);
         $executor = TaskFactory::build($task->task, $task->action);
-        $result = $executor->run(json_decode($task->data, true));
+        self::assertTrue($executor->run($task));
+        $task = Task::findOne(['id' => $data['id']]);
+        $result = json_decode($task->result, true);
         self::assertArrayHasKey('type', $result);
         self::assertSame($result['type'], 'success');
     }

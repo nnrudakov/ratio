@@ -2,7 +2,10 @@
 
 namespace app\models\Plp\Task;
 
+use yii\base\InvalidParamException;
 use yii\base\Object;
+use yii\helpers\Json;
+use app\models\Plp\Task;
 
 /**
  * Базовый класс задач.
@@ -25,12 +28,24 @@ class BaseTask extends Object
     /**
      * Запуск метода.
      *
-     * @param array $data Параметры для метода.
+     * Запускается метод, выполняющий задачу. В случае успешного выполнения записывает результат в БД через
+     * переданную задачу. Если выполнение задачи было неудачным, то результат также пишется в БД со своими статусами.
      *
-     * @return array Результат выполнения.
+     * @param Task $task Задача в БД.
+     *
+     * @return bool
+     *
+     * @throws \yii\base\InvalidConfigException
+     * @throws \yii\base\InvalidParamException
      */
-    public function run(array $data)
+    public function run(Task $task)
     {
-        return $this->{$this->method}($data);
+        $result = $this->{$this->method}(json_decode($task->data, true));
+
+        $task->result = Json::encode($result);
+        $task->setDone();
+        $task->save();
+
+        return true;
     }
 }

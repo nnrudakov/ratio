@@ -20,7 +20,7 @@ class Integration extends BaseTask
      */
     public static function process(array $data = [])
     {
-        $result = ['type' => 'success'];
+        $result = ['type' => 'success', 'message' => 'Задача выполнена.'];
 
         return $result;
     }

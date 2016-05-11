@@ -2,6 +2,7 @@
 
 namespace app\models\Plp;
 
+use yii;
 use yii\db\ActiveRecord;
 
 /**
@@ -22,6 +23,20 @@ use yii\db\ActiveRecord;
  */
 class Task extends ActiveRecord
 {
+    /**
+     * Статус задачи "невыполнена".
+     *
+     * @var integer
+     */
+    const STATUS_UNDONE = 0;
+
+    /**
+     * Статус задачи "выполнена".
+     *
+     * @var integer
+     */
+    const STATUS_DONE = 1;
+
     /**
      * @inheritdoc
      */
@@ -49,18 +64,30 @@ class Task extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
+            'id'         => 'ID',
             'account_id' => 'Account ID',
-            'created' => 'Created',
-            'deffer' => 'Deffer',
-            'type' => 'Type',
-            'task' => 'Task',
-            'action' => 'Action',
-            'data' => 'Data',
-            'status' => 'Status',
-            'retries' => 'Retries',
-            'finished' => 'Finished',
-            'result' => 'Result',
+            'created'    => 'Created',
+            'deffer'     => 'Deffer',
+            'type'       => 'Type',
+            'task'       => 'Task',
+            'action'     => 'Action',
+            'data'       => 'Data',
+            'status'     => 'Status',
+            'retries'    => 'Retries',
+            'finished'   => 'Finished',
+            'result'     => 'Result',
         ];
+    }
+
+    /**
+     * Установка задачи как выполненной.
+     *
+     * @throws yii\base\InvalidConfigException
+     * @throws yii\base\InvalidParamException
+     */
+    public function setDone()
+    {
+        $this->finished = Yii::$app->formatter->asDatetime('now', 'yyyy-MM-dd HH:mm:ss');
+        $this->status = self::STATUS_DONE;
     }
 }
